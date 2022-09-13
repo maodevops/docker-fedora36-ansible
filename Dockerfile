@@ -1,11 +1,11 @@
 #
 # Dockerfile used to build Fedora 36 images for testing Ansible
 #
+
 # syntax = docker/dockerfile:1
 
 ARG BASE_IMAGE_TAG=36
 
-# hadolint ignore=DL3006
 FROM fedora:${BASE_IMAGE_TAG}
 
 ENV container=docker
@@ -22,15 +22,16 @@ RUN dnf -y install systemd && dnf clean all && \
 
 # Install required packages
 # hadolint ignore=DL3041
-RUN dnf -y install rpm dnf-plugins-core \
-  && dnf -y update \
-  && dnf -y install \
+RUN dnf -y install rpm dnf-plugins-core ; \
+  dnf -y update ; \
+  dnf -y install \
     sudo \
     which \
     python3-pip \
-    python3-pyyaml \
-  && dnf clean all \
-  && pip3 install --no-cache-dir --upgrade pip
+    python3-pyyaml ; \
+  dnf clean all ; \
+  pip3 install --no-cache-dir --upgrade pip
 
 VOLUME ["/sys/fs/cgroup"]
+
 CMD ["/usr/lib/systemd/systemd"]
